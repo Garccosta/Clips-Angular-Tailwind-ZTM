@@ -23,16 +23,24 @@ export class AuthService {
     age, 
     phoneNumber} : IUser): Promise<any> {
 
-    const userCredentials = this.auth.createUserWithEmailAndPassword(
+    const userCredentials = await this.auth.createUserWithEmailAndPassword(
       email as string,
       password as string
     )
 
-    await this.usersCollection.add({
+    if(!userCredentials.user){
+      throw new Error('Error creating user')
+    }
+
+    await this.usersCollection.doc(userCredentials.user?.uid).set({
       name,
       email,
       age,
       phoneNumber
+    })
+
+    userCredentials.user.updateProfile({
+      displayName: name
     })
   }
 }
