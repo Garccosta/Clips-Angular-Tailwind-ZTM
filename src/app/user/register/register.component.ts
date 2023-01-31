@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import IUser from 'src/app/models/user.model';
+import { RegisterValidators } from '../validators/register-validators';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -10,7 +11,7 @@ import IUser from 'src/app/models/user.model';
 export class RegisterComponent {
   constructor(
     private auth: AuthService,
-  ) {}
+  ) { }
   inSubmission = false;
 
   name = new FormControl('', [
@@ -36,11 +37,11 @@ export class RegisterComponent {
   phoneNumber = new FormControl('', [
     Validators.required,
     Validators.minLength(14),
-    Validators.maxLength(14),  
+    Validators.maxLength(14),
   ]);
 
   showAlert = false;
-  alertMsg= 'Please wait! Your account is being created.';
+  alertMsg = 'Please wait! Your account is being created.';
   alertColor = 'blue';
 
   registerForm = new FormGroup({
@@ -50,7 +51,7 @@ export class RegisterComponent {
     password: this.password,
     confirm_password: this.confirm_password,
     phoneNumber: this.phoneNumber,
-  })
+  }, [RegisterValidators.match])
 
   async register() {
     this.showAlert = true;
@@ -61,7 +62,7 @@ export class RegisterComponent {
     try {
       await this.auth.createUser(this.registerForm.value as IUser)
 
-    } catch(error) {
+    } catch (error) {
       this.alertMsg = "Something went wrong. Please try again.";
       this.alertColor = 'red';
       this.inSubmission = false;
