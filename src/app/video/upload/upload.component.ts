@@ -11,6 +11,10 @@ export class UploadComponent {
   isDragover = false
   file: File | null = null
   nextStep = false
+  showAlert = false
+  alertColor = 'blue'
+  alertMsg = "Please wait! Your clip is being uploaded."
+  inSubmission = false
 
   constructor(private storage: AngularFireStorage) { }
 
@@ -42,6 +46,12 @@ export class UploadComponent {
   }
 
   uploadFile() {
+    this.showAlert = true 
+    this.alertColor = 'blue'
+    this.alertMsg = "Please wait! Your clip is being uploaded."
+    this.inSubmission = true
+
+
     const clipFileName = uuid()
     const clipPath = `clips/${clipFileName}.mp4`
 
