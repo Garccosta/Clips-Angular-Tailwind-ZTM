@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { last, switchMap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { FfmpegService } from 'src/app/services/ffmpeg.service';
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -29,10 +30,12 @@ export class UploadComponent implements OnDestroy {
     private storage: AngularFireStorage,
     private auth: AngularFireAuth,
     private clipService: ClipService,
-    private router: Router
-    ) {
-      auth.user.subscribe(user => this.user = user)
-     }
+    private router: Router,
+    public ffmpegService: FfmpegService
+  ) {
+    auth.user.subscribe(user => this.user = user)
+    this.ffmpegService.init()
+  }
 
   ngOnDestroy(): void {
     this.task?.cancel()
